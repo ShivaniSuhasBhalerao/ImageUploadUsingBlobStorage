@@ -1,0 +1,47 @@
+<form #f="ngForm" id="f" (ngSubmit)="submit()" novalidate>
+
+
+  <img src="{{imageSrc}}" />
+
+  <div class="form-group">
+
+    <label>headTeacherName</label>
+
+    <input type="text" [(ngModel)]="bookCreateAndUpdateDto.name" class="form-control" name="headTeacherName" />
+
+  </div>
+  <!-- <div class="form-group">
+  
+        <label>image</label>
+    
+        <input
+    
+          type="text"
+    
+          [(ngModel)]="bookCreateAndUpdateDto.image"
+    
+          class="form-control"
+    
+          name="image"
+    
+        />
+    
+      </div> -->
+
+
+  <div class="form-group row">
+
+    <label for="">HeadTeacherSignatureImage</label>
+
+    <input type="file" (change)="upload($event)" accept="image/*" name="myfile" required />
+
+  </div>
+
+  <!-- <img (click)="fileUpload()"  
+    [src]="profileUrl | async" width="138" height="138" class="img-thumbnail img-rounded" #imgCustomer />
+    -->
+
+
+  <input type="submit" />
+
+</form>
