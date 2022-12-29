@@ -20,6 +20,7 @@ namespace BookStore.Controllers.Books
         public BookController(IBookAppService bookAppService)
         {
             _bookAppService = bookAppService;
+
         }
 
         [HttpGet]
