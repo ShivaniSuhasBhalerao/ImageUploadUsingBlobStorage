@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BookStore.Email;
+using BookStore.Emailsend;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,11 +31,12 @@ public class Program
         {
             Log.Information("Starting BookStore.HttpApi.Host.");
             var builder = WebApplication.CreateBuilder(args);
-
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
             await builder.AddApplicationAsync<BookStoreHttpApiHostModule>();
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddScoped<IEmailServices, EmailService>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
             await app.RunAsync();

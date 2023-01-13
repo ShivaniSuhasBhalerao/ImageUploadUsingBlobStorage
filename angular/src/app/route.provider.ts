@@ -14,7 +14,28 @@ function configureRoutes(routesService: RoutesService) {
         iconClass: 'fas fa-home',
         order: 1,
         layout: eLayoutType.application,
+      },{
+        path: '/book',
+        name: 'Book',
+        iconClass: 'fas fa-home',
+        order: 2,
+        layout: eLayoutType.application,
       },
+      {
+        path: '/forgotpassword',
+        name: 'Forgot Password',
+        iconClass: 'fas fa-home',
+        order: 3,
+        layout: eLayoutType.application,
+      },
+      {
+        path: '/resetpassword',
+        name: 'Reset Password',
+        iconClass: 'fas fa-home',
+        order: 4,
+        layout: eLayoutType.application,
+      },
+      
     ]);
   };
 }

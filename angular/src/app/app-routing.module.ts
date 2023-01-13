@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { BooksComponent } from './books/books.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -25,6 +28,18 @@ const routes: Routes = [
     loadChildren: () =>
       import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),
   },
+  {
+    path:'book',
+    component:BooksComponent
+  },
+  {
+    path:'forgotpassword',
+    component:ForgotPasswordComponent
+  },
+  {
+    path:'resetpassword',
+    component:ResetPasswordComponent
+  }
 ];
 
 @NgModule({

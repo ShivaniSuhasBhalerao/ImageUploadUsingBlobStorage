@@ -15,6 +15,8 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using BookStore.ImageData;
 using BookStore.Books;
+using BookStore.Email;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace BookStore.EntityFrameworkCore;
 
@@ -28,6 +30,8 @@ public class BookStoreDbContext :
 {
 
     public DbSet<Book> Books { get; set; }
+    public DbSet<EmailSettings> EmailConfigration { get; set; }
+    public DbSet<Emailtemplate> Emailtemplates { get; set; }
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
     #region Entities from the modules
@@ -86,6 +90,7 @@ public class BookStoreDbContext :
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
+       
         builder.ConfigureBlobStoring();
         }
 }

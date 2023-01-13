@@ -15,6 +15,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 import { BooksComponent } from './books/books.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   imports: [
@@ -33,7 +35,7 @@ import { BooksComponent } from './books/books.component';
     ThemeLeptonXModule.forRoot(),
     SideMenuLayoutModule.forRoot(),
   ],
-  declarations: [AppComponent, BooksComponent],
+  declarations: [AppComponent, BooksComponent, ForgotPasswordComponent, ResetPasswordComponent],
   providers: [APP_ROUTE_PROVIDER],
   bootstrap: [AppComponent],
 })

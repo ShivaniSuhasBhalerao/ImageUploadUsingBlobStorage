@@ -9,7 +9,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
   imports: [
     CoreModule,
     ThemeSharedModule,
-    NgbDropdownModule,
+   // NgbDropdownModule,
     NgxValidateCoreModule
   ],
   exports: [

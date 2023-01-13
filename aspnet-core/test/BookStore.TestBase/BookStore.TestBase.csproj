@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="MimeMapping" Version="1.0.1.50" />
     <PackageReference Include="Volo.Abp.BlobStoring" Version="6.0.2" />
+    <PackageReference Include="Volo.Abp.MailKit" Version="6.0.0" />
     <PackageReference Include="Volo.Abp.TestBase" Version="6.0.0" />
     <PackageReference Include="Volo.Abp.Autofac" Version="6.0.0" />
     <PackageReference Include="Volo.Abp.Authorization" Version="6.0.0" />
