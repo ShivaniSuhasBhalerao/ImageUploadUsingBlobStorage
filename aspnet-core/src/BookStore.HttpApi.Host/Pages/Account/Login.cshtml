@@ -1,0 +1,170 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bootstrap
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.Account.Settings
+@using Volo.Abp.Settings
+
+@model YogapointVersion_1.Pages.Account.CustomLoginModel
+
+@inject IHtmlLocalizer<AccountResource> L
+@inject Volo.Abp.Settings.ISettingProvider SettingProvider
+@{
+    ViewData["Title"]="Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <link rel="stylesheet" href="../Pages/Account/Login.css" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="card rounded-3 shadow">
+        <div class="card-body abp-background p-5">
+            <div class="row">
+                <div class="col-6">
+                    @*<div class="card text-center mt-3 shadow-sm rounded">*@
+                    @*<div class="card-body abp-background p-5">*@
+
+                    <h4 id="font">@L["Sign In"]</h4>
+                    <h6 id="account">Please sign in or sign up for an account</h6>
+
+                    @if (Model.EnableLocalLogin)
+                    {
+                        <form method="post" class="mt-4 text-left">
+                            <input asp-for="ReturnUrl" />
+                            <input asp-for="ReturnUrlHash" />
+                            <div id="ep" style=" margin-top: -18px;">
+                                <div class="form-group">
+                                    <label id="label">Email Address <span class="text-danger">*</span></label>
+                                    <input asp-for="LoginInput.UserNameOrEmailAddress" id="in" class="form-control text-muted" placeholder="Enter Email Address" required />
+                                    <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label id="label">Password <span class="text-danger">*</span></label>
+                                    <input type="password" asp-for="LoginInput.Password" id="in" class="form-control text-muted" placeholder="Enter Password" required />
+                                    <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <abp-row style="margin:4px; font-size: smaller; margin-left: -14px; margin-top: 3px; ">
+                                <abp-column>
+                                    <abp-input asp-for="LoginInput.RememberMe" class="mb-4" style="font-size: smaller; " id="rem" />
+                                </abp-column>
+                                <abp-column class="text-right">
+                                    <a href="@Url.Page("./ForgotPassword", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" id="pass">@L["ForgotPassword"]</a>
+                                </abp-column>
+                            </abp-row>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="submit" name="Action" value="Login" id="bt1" class="btn rounded">@L["SIGN IN"]</button>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-6">
+                                    @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
+                                    {
+                                        <strong>
+                                            @*@L["AreYouANewUser"]*@
+                                            <a class="btn" href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" id="register" style=" border: 1px solid darkgray; width: 370px; height: 38px; margin-top: -13px;" role="button">@L["SIGN UP"]</a>
+                                            @*<a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" id="register" class="text-decoration-none">@L["SIGN UP"]</a>*@
+                                        </strong>
+                                    }
+                                    @*<abp-button name="Action" value="Login" id="bt2" class="btn border">@L["SIGN UP"]</abp-button>*@
+                                </div>
+                            </div>
+
+                            @if (Model.ShowCancelButton)
+                            {
+                                <abp-button type="submit" button-type="Secondary" formnovalidate="formnovalidate" name="Action" value="Cancel" class="btn-block btn-lg mt-3">@L["Cancel"]</abp-button>
+                            }
+                        </form>
+
+                    }
+                    @if (Model.VisibleExternalProviders.Any())
+                    {
+                        <div class="mt-2">
+                            <h5 id="or">@L["OrLoginWith"]</h5>
+                        </div>
+
+                        <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                            <input asp-for="ReturnUrl" />
+                            <input asp-for="ReturnUrlHash" />
+                            @foreach (var provider in Model.VisibleExternalProviders)
+                            {
+                                @*<button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme" title="@L["GivenTenantIsNotAvailable", provider.DisplayName]">@provider.DisplayName</button>*@
+                            }
+                            <div class="row" style="margin-left: 59px;">
+                                <div class="col-md-2">
+                                    <button class="btn" value="Google" title="Google" name="provider" style="background-color:white;border:none">
+                                        <i style='font-size:24px;color:#F25022' class='fab'>&#xf1a0;</i>
+                                    </button>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn" value="Facebook" title="Facebook" name="provider" id="linkIcon">
+                                        <i style='font-size:24px;color:#1778F2' class='fab'>&#xf09a;</i>
+                                    </button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn" value="LinkedIn" title="LinkedIn" name="provider" id="facebookIcon">
+                                        <i style='font-size:24px;color:#0072b1' class='fab'>&#xf08c;</i>
+                                    </button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn" value="Microsoft" title="Microsoft" name="provider" style="background-color:white;border:none">
+                                        <i style='font-size:24px;color:#F25022' class='fab'>&#xf3ca;</i>
+                                    </button>
+                                </div>
+                                @*<div class="col-md-2">
+                            <a href="https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?response_type=code&client_id=155854996550-rlgso3sq24b2fa9cl8nvai3spb1c1iji.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Flocalhost%3A44331%2Fsignin-google&scope=openid%20profile%20email&state=CfDJ8MmTecKgjcBDtxJZG4djvjKY8HHJEBYjQdUFNIjTmmCHnYbOcFgbN9Et1ib2M25IcwyJFBGpGkVdyo8HtZ4MLIi2R0fnuyh7nl8AA5tmVNKb0So9GNkZ-8k9G700zk0vcILj3MlRVpX4zilYvtbK6-3I6aj9OuyBYorMGll5YtpFToyMG9dNrLSngE0uFFs4XeXBfGy_N5jeJKhlJuxZTED8dBkc3NkCkKX6AP9GbeQLa5rrDstcAte5Pk4l_-NoWSxfEqQVcj3BGjlEf1mymtwRfClTfP1XAC5wczeRWAV5F_ZS1xLz-62hrAx4DnMMXr_xFtyQPu4a1Ix0ysdb-Rnof_9YqRhXom0dlhjM_5SYAtr5ptd-7ZI-wniWO0JQ-bq1GMhOatLC7DZCuZcSvwZXm2oWmCwKMUPHcrxXrxy3uTXD8OM4jO9WzT_eFAonBy5OBt9rYk2oGQkmaPQIGhRMyAkx6a1OVk8aE8bg70xySXKbqNOrXHnvp9DPPdm_CoNIsBsFbvsmVrH78lcurf411LLDMiDEBJ_Q1HlITFE5rDRfGSvi7eshEAvCfMRVncrjp4F5t7m-w6Z8-9QK7IEIwGKjVXq2DMv2qY6f6m72ThDa8CFpl6uozYeQa1ggfTtBHabyZLuKtiKAwWLKg3OmW50iOSeYQjur1H5NUHWDQgo6gDl202IDseGFMVnbhM2UOPPVXr9ECFWgG50qFTUy4-ni7nboVvfjBqSGkbhViRR43_zd8cc3dTHJy4g0jd1sWxJPWn4tmzqM7Cfg3EabRIuGs6nGOkufGb07lfB4FGly42TOo4vnUFk5Nlqqnpm8JAXxIeX-nuznpuCZ1aaNE64kYwu7LFiOT416A7ofpNIpKBYmMPlSge1Dm9YZlf6EscfO_qSPMsazfRi38cs&service=lso&o2v=2&flowName=GeneralOAuthFlow">
+                            <img src="~/images/logo/leptonx/Logo_Google.png" style="font-size:24px;" />
+                            </a>
+                            </div>
+
+                            <div class="col-md-2">
+                            <a href="https://www.facebook.com/login.php?skip_api_login=1&api_key=1357660331636749&kid_directed_site=0&app_id=1357660331636749&signed_next=1&next=https%3A%2F%2Fwww.facebook.com%2Fv11.0%2Fdialog%2Foauth%3Fclient_id%3D%2B1357660331636749%26scope%3Demail%26response_type%3Dcode%26redirect_uri%3Dhttps%253A%252F%252Flocalhost%253A44331%252Fsignin-facebook%26state%3DCfDJ8MmTecKgjcBDtxJZG4djvjKKStxW0Lk8CwoiXZ30pVJkfTWAOTF8zr2Ntic3Uq_5b3SREG2SruwhM2ukyX-a6PAnPilrmZWhyhxJTc4gp297t4HC2CwWr2IP-F9MoP1nir5TtKDLeqNawUWmmz5FSqGJ-_pftJH4IPTndANYs0fntyB0mgrAiIL-Gqefo8_AgvRqOEIkTxolrKnhlEgOVb-v_TLfiICDOhf37mNxgph6zhiDvUjLuW5h-chbOUW6kpCcdSFzlYlz3wQvVFWNGy9sexwR1p6gkQ72OFTjkyJ9HIpPe_O91d8lX5-VLqG4cDj9dscjcJwSjKdrLurjZba4sJppjdru4aQj55PJpakr6awIp7zkis_ltHX9bdpY_EU1jlfOpT_1a77Q19SqY8UBQEVJM_yNdHb9DeXDLszckUwRsdd4Pc9lxn9qEG07YDulSPkhsnUKcPbYNhvzPW8SVCq-vnII37EU8kvJm3JGGRnlRI8i6-GFD5l89aiq4g4nhQJXdMDtlqm0D8AdSdNQoz1xGBTVZLmiFPVTIHrtFf_O7j4SsvYcX5Kb5oB2b458GVkJ-VglU5dAdGfWVCzG5I7NDKgiOI4nH8E13c5nNRnXyWlI9HJwB4vzqAs4xzqglyXS2pAbI4uf8wb1CqHrzzej6L7nNsGQGmZgdbN4dEb7aICNdltVTpXOnKBxyc835stMryzNNvHWGgEDiZzE7RZptt6sQIjZD-Mji9IMeMW5c63QKcEMoam-O8v7kPxFDkR1wgwsk1S9eO6dX8r6BJbjhhV7ahxlj_-doq5QDoooRvt7C4FUGYyFyQWTtOSmLlJalKqmRhktbzaASnMvoWF8QRuo-ZM7_TtAqriuyibP_ANfFfDbT9sDf4oTDAGioc-BJZd-ufmFcnb5Y_QtuEbvzE-pWgqxtd6ejE91%26ret%3Dlogin%26fbapp_pres%3D0%26logger_id%3D6e53f596-3d33-4089-b0d4-eb2d7dffed26%26tp%3Dunspecified&cancel_url=https%3A%2F%2Flocalhost%3A44331%2Fsignin-facebook%3Ferror%3Daccess_denied%26error_code%3D200%26error_description%3DPermissions%2Berror%26error_reason%3Duser_denied%26state%3DCfDJ8MmTecKgjcBDtxJZG4djvjKKStxW0Lk8CwoiXZ30pVJkfTWAOTF8zr2Ntic3Uq_5b3SREG2SruwhM2ukyX-a6PAnPilrmZWhyhxJTc4gp297t4HC2CwWr2IP-F9MoP1nir5TtKDLeqNawUWmmz5FSqGJ-_pftJH4IPTndANYs0fntyB0mgrAiIL-Gqefo8_AgvRqOEIkTxolrKnhlEgOVb-v_TLfiICDOhf37mNxgph6zhiDvUjLuW5h-chbOUW6kpCcdSFzlYlz3wQvVFWNGy9sexwR1p6gkQ72OFTjkyJ9HIpPe_O91d8lX5-VLqG4cDj9dscjcJwSjKdrLurjZba4sJppjdru4aQj55PJpakr6awIp7zkis_ltHX9bdpY_EU1jlfOpT_1a77Q19SqY8UBQEVJM_yNdHb9DeXDLszckUwRsdd4Pc9lxn9qEG07YDulSPkhsnUKcPbYNhvzPW8SVCq-vnII37EU8kvJm3JGGRnlRI8i6-GFD5l89aiq4g4nhQJXdMDtlqm0D8AdSdNQoz1xGBTVZLmiFPVTIHrtFf_O7j4SsvYcX5Kb5oB2b458GVkJ-VglU5dAdGfWVCzG5I7NDKgiOI4nH8E13c5nNRnXyWlI9HJwB4vzqAs4xzqglyXS2pAbI4uf8wb1CqHrzzej6L7nNsGQGmZgdbN4dEb7aICNdltVTpXOnKBxyc835stMryzNNvHWGgEDiZzE7RZptt6sQIjZD-Mji9IMeMW5c63QKcEMoam-O8v7kPxFDkR1wgwsk1S9eO6dX8r6BJbjhhV7ahxlj_-doq5QDoooRvt7C4FUGYyFyQWTtOSmLlJalKqmRhktbzaASnMvoWF8QRuo-ZM7_TtAqriuyibP_ANfFfDbT9sDf4oTDAGioc-BJZd-ufmFcnb5Y_QtuEbvzE-pWgqxtd6ejE91%23_%3D_&display=page&locale=en_GB&pl_dbl=0">
+                            <img src="~/images/logo/leptonx/Logo_Facebook.png" />
+                            </a>
+                            </div>
+
+                            <div class="col-md-2">
+                            <a href="https://www.linkedin.com/uas/login?session_redirect=%2Foauth%2Fv2%2Flogin-success%3Fapp_id%3D206501611%26auth_type%3DAC%26flow%3D%257B%2522scope%2522%253A%2522r_liteprofile%2Br_emailaddress%2522%252C%2522state%2522%253A%2522CfDJ8MmTecKgjcBDtxJZG4djvjLcxy0JXOSegnx2zcvGS2Fg7ksUwBJxyJVA_1IXpOr4Lh9q1wljv-VKxPJZ3tFFzujQ-Q--ZYPfqXYx4OAXY9jPbvci8_DMKz2GEEq5BD5h-W2I9CYczr0wljhp6ZDhAUCoefEc8gcTDWTG8ouLgmlK_zF6KPW56wd-jsWboPXfXhHoV7iooknOikql92WlQVKAumz8fw98nQJ0fWsMRaMTSXt2CNB0XC150IG2FouhY1jZYdwKunpnjRR9RknZtnm-0xEL_Fs4yi_eQcK889Y8FGkZTuYZLDkRTmlx4GsXXMuR4tyjNiVSjkKFdaBt7n6v1HyvC1vgRVXWxD7yCV5SS5q8wBj-aP40GbPTSk0A_qQXtRNbetPzV5OHjb5Hlx4fuOoUWnxwdbs44R6Gb52NdiVnemxXGFdH8hIgZZM_8cP8MXhJ-RWlymFxjgisZ_qLhZQbBfAJeRumOJQ853YHOESeBvB3JauxdhGis6fJZtM0bMRJ3RdBytOILeN2yZSLe_xAsVMTYG6jlhLjghDGrbDIQ66QyRt5xiWxJchDM3fxBqB0h_rDTI8XwHgq-3lWTUII26BqnyHW3Txw0AK00cPjtaLdTsji3a60A0pJ1lRnQsdS2LhW7DtqV1YIEp7IKzCILsoC90p8yrUK8Aio4ZWFhUHPkz99AIXBiDwj16DcUg5-ECW1oEYlLbEze-Qt3it2pXo5dfhtip0iv_0KHlafYf3uROyyB-dCurHXXsw-I0JAAuuAqNer4Aghl1GP5lQ46BW5rocqmhXnK4T0ombv_EAAZfjEJHAbeA6e_5_K6CA79bnkBqjkYAoMVjBOCFem0uFJSBkrjjZljfMAZNlflcMKepiXOwmY8-gmqFt6hNSNCBfa8ZPn4tGrfMLKR-CvmxborUcLxSpk410Q%2522%252C%2522appId%2522%253A206501611%252C%2522authorizationType%2522%253A%2522OAUTH2_AUTHORIZATION_CODE%2522%252C%2522authFlowName%2522%253A%2522generic-permission-list%2522%252C%2522currentSubStage%2522%253A0%252C%2522creationTime%2522%253A1669617828394%252C%2522currentStage%2522%253A%2522LOGIN_SUCCESS%2522%252C%2522redirectUri%2522%253A%2522https%253A%252F%252Flocalhost%253A44331%252Fsignin-linkedin%2522%257D&fromSignIn=1&trk=oauth&cancel_redirect=%2Foauth%2Fv2%2Flogin-cancel%3Fapp_id%3D206501611%26auth_type%3DAC%26flow%3D%257B%2522scope%2522%253A%2522r_liteprofile%2Br_emailaddress%2522%252C%2522state%2522%253A%2522CfDJ8MmTecKgjcBDtxJZG4djvjLcxy0JXOSegnx2zcvGS2Fg7ksUwBJxyJVA_1IXpOr4Lh9q1wljv-VKxPJZ3tFFzujQ-Q--ZYPfqXYx4OAXY9jPbvci8_DMKz2GEEq5BD5h-W2I9CYczr0wljhp6ZDhAUCoefEc8gcTDWTG8ouLgmlK_zF6KPW56wd-jsWboPXfXhHoV7iooknOikql92WlQVKAumz8fw98nQJ0fWsMRaMTSXt2CNB0XC150IG2FouhY1jZYdwKunpnjRR9RknZtnm-0xEL_Fs4yi_eQcK889Y8FGkZTuYZLDkRTmlx4GsXXMuR4tyjNiVSjkKFdaBt7n6v1HyvC1vgRVXWxD7yCV5SS5q8wBj-aP40GbPTSk0A_qQXtRNbetPzV5OHjb5Hlx4fuOoUWnxwdbs44R6Gb52NdiVnemxXGFdH8hIgZZM_8cP8MXhJ-RWlymFxjgisZ_qLhZQbBfAJeRumOJQ853YHOESeBvB3JauxdhGis6fJZtM0bMRJ3RdBytOILeN2yZSLe_xAsVMTYG6jlhLjghDGrbDIQ66QyRt5xiWxJchDM3fxBqB0h_rDTI8XwHgq-3lWTUII26BqnyHW3Txw0AK00cPjtaLdTsji3a60A0pJ1lRnQsdS2LhW7DtqV1YIEp7IKzCILsoC90p8yrUK8Aio4ZWFhUHPkz99AIXBiDwj16DcUg5-ECW1oEYlLbEze-Qt3it2pXo5dfhtip0iv_0KHlafYf3uROyyB-dCurHXXsw-I0JAAuuAqNer4Aghl1GP5lQ46BW5rocqmhXnK4T0ombv_EAAZfjEJHAbeA6e_5_K6CA79bnkBqjkYAoMVjBOCFem0uFJSBkrjjZljfMAZNlflcMKepiXOwmY8-gmqFt6hNSNCBfa8ZPn4tGrfMLKR-CvmxborUcLxSpk410Q%2522%252C%2522appId%2522%253A206501611%252C%2522authorizationType%2522%253A%2522OAUTH2_AUTHORIZATION_CODE%2522%252C%2522authFlowName%2522%253A%2522generic-permission-list%2522%252C%2522currentSubStage%2522%253A0%252C%2522creationTime%2522%253A1669617828394%252C%2522currentStage%2522%253A%2522LOGIN_SUCCESS%2522%252C%2522redirectUri%2522%253A%2522https%253A%252F%252Flocalhost%253A44331%252Fsignin-linkedin%2522%257D">
+                            <img src="~/images/logo/leptonx/Logo_LinkedIn.png" style="font-size:24px;" />
+                            </a>
+                            </div>
+
+                            <div class="col-md-2">
+                            <a href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=f9139cf6-574f-4042-b667-ba08eda281a5&response_type=code&redirect_uri=https%3A%2F%2Flocalhost%3A44331%2Fsignin-microsoft&scope=https%3A%2F%2Fgraph.microsoft.com%2Fuser.read&code_challenge=gWEqEZQDPS_rOd9sKqtXu5Wt8kPNISQpzltxCJ2a268&code_challenge_method=S256&state=CfDJ8MmTecKgjcBDtxJZG4djvjK5nh0tjHUUxNEALUsW3t8mF-w2X4UANNHCsnzode2nsXpM4dUi_4o8YEJBPxLZgFLDZKvOJo5qbqvan5OO9bsHnI0OFzleDY-GEqKsHr0dutIdpTA4pOhHtasjRX62CovfG_W4FdRJI11KKGOFj9JeoTh1C00CkGB0eAFYzKbZY2dlx88DrXdq4_TxSyEhC81GhzP8noqBV5xkVKeLb8C2b1KfmNkfjt-axrA4P8Yuo3eWp3ds3iWv2X5c_6wEPtjbKjo1iClsQEk2qyAa02gfEHqsqGK9m85llq_oy-48C7oWA-tYU_4veaKeTXaofNTq3xNsFietfR0qQjoAW-43sV32-W-suWlXDeW73s0wp8_W5YYDGYdAuc7Z4AWqOA1euGcmc56udFz9CaPTTy4slCtKQYQDlsmgT2o7vuWRl0kYox11K7w3q0vFrFxfLJLvbC-zfP85cPAiyeSpL8qoHx5hBf3zu8tLIWuvSd5OhCk5H86PvbsHRVYklblIMPBQKUwT8YBwUuMtQhsV5aG0-rP27bdz35cPBqIawnVqlq8ty72ryW7_TO8V7WXvu0msg5SmiADMsxom5Rl8QdU_bGHLPEAYBhROztDKs9LydWLPqjYTHvNcsJptnJz9hGykl93WgOemDvd2Bjrw9HnQbH-tT4ezLhzJ0o2dtxdLyg-PKNDwVFQjCabNYwBBvAiZX4g4lRHeWFZj5O67G3GYN_Z4WWTMxCiUAXCQOZ4EdbL-60_GRI9K3-WEKe4Y3r_1TsAUnJKw4jMb8w5umX71YJHYMG2Rn4K5I2FNwid2CADfziV8ne4yfEzV_VeXmGan4Qq7258cSKIeKvX4qTvdv3fhEcyeQsc0qQhvkhXGcz90t0VAqy02VTknIHi9hK-t16CZqT-pVU0HCZ83P_H_RZj0QKBRISqfmZxg476XZ5iYt9Nfak4x4I7gOM-3cyCGB6Ck2gdoW2RpKPFLByIX">
+                            <img src="~/images/logo/leptonx/Logo_Microsoft.png" style="font-size:24px;" />
+                            </a>
+                            </div>*@
+                            </div>
+                        </form>
+                    }
+                    <div class="row">
+                        <span id="agree">By continuing I agree to <a href="@Url.Page("./TermsOfService", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" id="term">@L["Terms of Service"]</a></span>
+                    </div>
+                    @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+                    {
+                        <div class="alert alert-warning">
+                            <strong>@L["InvalidLoginRequest"]</strong>
+                            @L["ThereAreNoLoginSchemesConfiguredForThisClient"]
+                        </div>
+                    }
+                </div>
+                <div class="col-6">
+                    <img class="logo" src="/images/logo/leptonx/Login_Page_1.png" alt="ABP logo">
+                    <img src="/images/logo/leptonx/Logo_YogaPoint.png" id="l2">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

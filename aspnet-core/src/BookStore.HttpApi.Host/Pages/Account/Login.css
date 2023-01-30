@@ -1,0 +1,128 @@
+﻿.card {
+    width: 135%;
+    margin-left: -137px;
+}
+
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.logo {
+    height: 366px;
+    width: 351px;
+    margin-top: 68px;
+    margin-left: 41px;
+    /* padding: 22px;*/
+}
+
+#account {
+    text-align: left;
+    font: normal normal normal 16px/22px Open Sans;
+    letter-spacing: 0px;
+    color: lightgray;
+    opacity: 1;
+}
+
+#rem {
+    font-size: smaller;
+}
+
+#label {
+    text-align: left;
+    font: normal normal normal 14px/16px Open Sans;
+    letter-spacing: 0px;
+    color: #626262;
+    opacity: 1;
+}
+
+#font {
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: 0px;
+    color: #373737;
+    opacity: 1;
+    font: normal normal bold 30px/18px Open Sans;
+}
+
+#bt1 {
+    background-color: #F87400;
+    width: 370px;
+    color: white;
+    border: 0px;
+    height: 38px;
+    text-align: center;
+    margin-top: -26px;
+}
+
+#bt2 {
+    margin-top: 13px;
+    width: 370px;
+    height: 38px;
+    border: 1px solid #27496D;
+    border-radius: 8px;
+    text-align: center;
+}
+
+#in {
+    height: 39px;
+    width: 370px;
+    color: lightgray;
+}
+
+#pass {
+    text-align: right;
+    text-decoration: underline;
+    color: #E3372E;
+    font-size: smaller;
+    margin-left: 90px;
+}
+
+#l2 {
+    width: 64px;
+    margin-top: -749px;
+    margin-left: 179px;
+}
+
+#or {
+    text-align: center;
+    margin-top: 48px;
+    font-size: smaller;
+}
+
+#agree {
+    text-align: left;
+    font: normal normal normal 14px/14px Open Sans;
+    letter-spacing: 0px;
+    color: #C4C4C4;
+    opacity: 1;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#term {
+    text-decoration: underline;
+    color: #F89D00
+}
+
+#register {
+    border: 1px solid darkgray;
+    width: 370px;
+    height: 38px;
+    margin-top: -6px;
+}
+/*#register {
+    border: 1px solid #27496D;
+    border-radius: 8px;
+    text-align: center;
+    font: normal normal 600 14px/16px Open Sans;
+    letter-spacing: 0px;
+    color: #27496D;
+    text-transform: uppercase;
+    opacity: 1;
+    width: 370px;
+    height: 38px;
+}*/
